@@ -1,5 +1,3 @@
-100-set_string.c
-
 #include "main.h"
 
 /**
