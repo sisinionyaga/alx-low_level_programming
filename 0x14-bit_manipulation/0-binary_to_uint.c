@@ -1,40 +1,29 @@
-#include <stdio.h>
-
+#include "main.h"
 
 /**
- * binary_to_uint - Entry point
+ * binary_to_uint - This function converts a binary number to an unsigned int.
+ * @b: its a pointer to a string containing a binary number
  *
- * description: This function serves as the entry point for the program. 
- * It tests the
- * binary_to_uint function by calling it with different binary strings and
- * printing the results.
- *
- * Return: Always 0 (indicating successful execution)
+ * Return: this  unsigned int with decimal value of binsry number, or 0 if error
  */
+unsigned int binary_to_uint(const char *b)
+{
+	int a;
+	unsigned int num;
 
-unsigned int binary_to_uint(const char *b) {
-	if (b == NULL)
+	num = 0;
+	if (!b)
 		return (0);
-	unsigned int result = 0;
-	char current;
-	while ((current = *b++) != '\0')
+	for (a = 0; b[a] != '\0'; a++)
 	{
-		if
-			(current != '0' && current != '1') {
-				/* Invalid character encountered */
-				return (0);
-			}
-		result = result * 2 + (current - '0');
+		if (b[a] != '0' && b[a] != '1')
+			return (0);
 	}
-	return result;
-}
-int main() {
-	const char *binaryString = "1101";
-	unsigned int result = binary_to_uint(binaryString);
-	if (result != 0) {
-		printf("Binary: %s\nUnsigned Integer: %u\n", binaryString, result);
+	for (a = 0; b[a] != '\0'; a++)
+	{
+		num <<= 1;
+		if (b[a] == '1')
+			num += 1;
 	}
-	else {
-		printf("Invalid binary string\n");}
-	return (0);
+	return (num);
 }
