@@ -1,38 +1,42 @@
 #include "main.h"
 
 /**
- * create_file - creates a file
- * @filename: filename.
- * @text_content: content written in the file.
+ * create_file - to create a file
+ * @filename: this is the filename.
+ * @text_content: the content writen in the file.
  *
- * Return: 1 if it succeeds, -1 if it fails.
+ * Return: will be 1 if it success. and will be-1 if it fails.
  */
 int create_file(const char *filename, char *text_content)
 {
-	int fd;        /* File descriptor for the created file */
-	int nletters;  /* Number of letters in the text_content */
-	int rwr;       /* Variable to store the result of write operation */
+	int fd;
+	int nletters;
+	int rwr;
 
 	if (!filename)
-		return (-1);  /* Check for NULL filename, return -1 if invalid input */
+		return (-1);
 
-	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);  /* Open or create file with write-only mode */
+	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 
 	if (fd == -1)
-		return (-1);  /* Return -1 if file opening or creation is unsuccessful */
+		return (-1);
 
 	if (!text_content)
-		text_content = "";  /* Set an empty string if text_content is NULL */
+		text_content = "";
 
 	for (nletters = 0; text_content[nletters]; nletters++)
-		;  /* Calculate the number of letters in text_content */
+		;
 
-	rwr = write(fd, text_content, nletters);  /* Write text_content to the file */
+	rwr = write(fd, text_content, nletters);
 
 	if (rwr == -1)
-		return (-1);  /* Return -1 if write operation fails */
+		return (-1);
 
-	close(fd);  /* Close the file descriptor */
+	close(fd);
 
-	return (1);  /* Return 1 to indicate success */
+	return (1);
 }
+
+/**
+ * Sisinio file
+ */
