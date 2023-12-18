@@ -1,39 +1,76 @@
 #include "main.h"
+#include <stdio.h>
 
 /**
- * append_text_to_file - appends text at the end of a file
- * @filename: filename.
- * @text_content: added content.
- *
- * Return: 1 if the file exists. -1 if it fails (does not exist
- * or if the operation fails).
+ * error_file - this will check if files can be opened.
+ * @file_from: will show where file_from.
+ * @file_to: for file_to.
+ * @argv: shows the arguments vector.
+ * Return: for no return.
  */
-int append_text_to_file(const char *filename, char *text_content)
+void error_file(int file_from, int file_to, char *argv[])
 {
-    int fd;        /* File descriptor for the opened file */
-    int nletters;  /* Number of letters in the text_content */
-    int rwr;       /* Variable to store the result of the write operation */
-
-    if (!filename)
-        return (-1);  /* Check for NULL filename, return -1 if invalid input */
-
-    fd = open(filename, O_WRONLY | O_APPEND);  /* Open file with write-only and append mode */
-
-    if (fd == -1)
-        return (-1);  /* Return -1 if file opening fails */
-
-    if (text_content)
-    {
-        for (nletters = 0; text_content[nletters]; nletters++)
-            ;  /* Calculate the number of letters in text_content */
-
-        rwr = write(fd, text_content, nletters);  /* Append text_content to the file */
-
-        if (rwr == -1)
-            return (-1);  /* Return -1 if the write operation fails */
-    }
-
-    close(fd);  /* Close the file descriptor */
-
-    return (1);  /* Return 1 to indicate success */
+	if (file_from == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+		exit(98);
+	}
+	if (file_to == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+		exit(99);
+	}
 }
+
+/**
+ * main - to check the code for alx students.
+ * @argc: for the number of arguments.
+ * @argv: any arguments vector.
+ * Return: will Always be 0.
+ */
+int main(int argc, char *argv[])
+{
+	int file_from, file_to, err_close;
+	ssize_t nchars, nwr;
+	char buf[1024];
+
+	if (argc != 3)
+	{
+		dprintf(STDERR_FILENO, "%s\n", "Usage: cp file_from file_to");
+		exit(97);
+	}
+
+	file_from = open(argv[1], O_RDONLY);
+	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 0664);
+	error_file(file_from, file_to, argv);
+
+	nchars = 1024;
+	while (nchars == 1024)
+	{
+		nchars = read(file_from, buf, 1024);
+		if (nchars == -1)
+			error_file(-1, 0, argv);
+		nwr = write(file_to, buf, nchars);
+		if (nwr == -1)
+			error_file(0, -1, argv);
+	}
+
+	err_close = close(file_from);
+	if (err_close == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from);
+		exit(100);
+	}
+
+	err_close = close(file_to);
+	if (err_close == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from);
+		exit(100);
+	}
+	return (0);
+}
+
+/**
+ * Sisinio file
+ */
